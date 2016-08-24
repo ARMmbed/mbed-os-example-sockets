@@ -1,6 +1,8 @@
 #include "mbed.h"
 #include "TCPSocket.h"
-#include "EthernetInterface.h"
+
+#define STR(x) STR2(x)
+#define STR2(x) #x
 
 
 // Socket demo
@@ -30,6 +32,30 @@ void http_demo(NetworkInterface *net) {
 }
 
 
+// Example with the ESP8266 interface
+#if defined(MBED_DEMO_WIFI)
+#include "ESP8266Interface.h"
+
+ESP8266Interface wifi(D1, D0);
+
+int main() {
+    // Brings up the esp8266
+    printf("ESP8266 socket example\n");
+    wifi.connect(STR(MBED_DEMO_WIFI_SSID), STR(MBED_DEMO_WIFI_PASS));
+
+    // Invoke the demo
+    http_demo(&wifi);
+
+    // Brings down the esp8266 
+    wifi.disconnect();
+
+    printf("Done\n");
+}
+
+// Example using the builtin ethernet interface
+#else
+#include "EthernetInterface.h"
+
 EthernetInterface eth;
 
 int main() {
@@ -45,4 +71,4 @@ int main() {
 
     printf("Done\n");
 }
-
+#endif
