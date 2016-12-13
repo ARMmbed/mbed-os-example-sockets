@@ -6,21 +6,9 @@ network-socket API that is provided as a part of [mbed-os](github.com/armmbed/mb
 The program brings up an underlying network interface, and uses it to perform an HTTP
 transaction over a TCPSocket.
 
-### Ethernet ###
-
-By default, the example should use the ethernet interface available on the board. Simply
-compile, flash, and run.
-
-### WiFi ###
-
-To enable WiFi, you will need an [esp8266](https://developer.mbed.org/teams/ESP8266/).
-To enable WiFi in the example, you will need to define three defines during compile time.
-
-``` bash
--DMBED_DEMO_WIFI            # enables wifi
--DMBED_DEMO_WIFI_SSID=ssid  # ssid
--DMBED_DEMO_WIFI_PASS=pass  # passphrase
-```
+**Note:** The current example is limited to the ethernet interface on supported devices.
+To use the example with a different interface, you will need to modify main.cpp and
+replace the EthernetInterface class with the appropriate interface.
 
 ### Documentation ###
 
