@@ -19,7 +19,7 @@ int main() {
     socket.open(&net);
     socket.connect("developer.mbed.org", 80);
 
-    // Send an http request
+    // Send an HTTP request
     char sbuffer[] = "GET / HTTP/1.1\r\nHost: developer.mbed.org\r\n\r\n";
     int scount = socket.send(sbuffer, sizeof sbuffer);
     printf("sent %d [%.*s]\n", scount, strstr(sbuffer, "\r\n")-sbuffer, sbuffer);
