@@ -13,3 +13,7 @@ replace the EthernetInterface class with the appropriate interface.
 ### Documentation ###
 
 More information on the network-socket API can be found in the [mbed handbook](https://docs.mbed.com/docs/mbed-os-api-reference/en/5.1/APIs/communication/network_sockets/).
+
+### Known issues
+
+- ARCH_PRO runtime fails for all toolchains - issue [here](https://github.com/ARMmbed/mbed-os-example-sockets/issues/17)
