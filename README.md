@@ -10,6 +10,18 @@ transaction over a TCPSocket.
 To use the example with a different interface, you will need to modify main.cpp and
 replace the EthernetInterface class with the appropriate interface.
 
+### Expected output ###
+
+```
+IP address: 10.118.14.45
+Netmask: 255.255.252.0
+Gateway: 10.118.12.1
+sent 39 [GET / HTTP/1.1]
+recv 173 [HTTP/1.1 200 OK]
+External IP address: 217.140.111.135
+Done
+```
+
 ### Documentation ###
 
 More information on the network-socket API can be found in the [mbed handbook](https://docs.mbed.com/docs/mbed-os-api-reference/en/latest/APIs/communication/network_sockets/).
