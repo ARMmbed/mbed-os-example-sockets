@@ -10,7 +10,7 @@ transaction over a TCPSocket.
 To use the example with a different interface, you will need to modify main.cpp and
 replace the EthernetInterface class with the appropriate interface.
 
-**Note:** The default serial port baudrate is 9600 bauds.
+**Note:** The default serial port baud rate is 9600 bit/s.
 
 ### Expected output ###
 
