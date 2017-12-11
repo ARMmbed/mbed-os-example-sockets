@@ -1,7 +1,7 @@
 ### Getting started with the network-socket API ###
 
 This is a quick example of a simple HTTP client program using the
-network-socket API that is provided as a part of [mbed-os](github.com/armmbed/mbed-os).
+[network-socket API](https://os.mbed.com/docs/latest/reference/network-socket.html) that is provided as a part of [mbed-os](github.com/armmbed/mbed-os).
 
 The program brings up an underlying network interface, and uses it to perform an HTTP
 transaction over a TCPSocket.
@@ -27,3 +27,7 @@ Done
 ### Documentation ###
 
 More information on the network-socket API can be found in the [mbed handbook](https://docs.mbed.com/docs/mbed-os-api-reference/en/latest/APIs/communication/network_sockets/).
+
+## Troubleshooting
+
+If you have problems, you can review the [documentation](https://os.mbed.com/docs/latest/tutorials/debugging.html) for suggestions on what could be wrong and how to fix it.
