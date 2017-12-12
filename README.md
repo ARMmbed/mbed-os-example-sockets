@@ -1,13 +1,13 @@
 ### Getting started with the network-socket API ###
 
 This is a quick example of a simple HTTP client program using the
-[network-socket API](https://os.mbed.com/docs/latest/reference/network-socket.html) that [Mbed OS](https://github.com/ARMmbed/mbed-os) provides.
+[network socket API](https://os.mbed.com/docs/latest/reference/network-socket.html) that [Mbed OS](https://github.com/ARMmbed/mbed-os) provides.
 
-The program brings up an underlying network interface, and uses it to perform an HTTP
+The program brings up an underlying network interface and uses it to perform an HTTP
 transaction over a TCPSocket.
 
 **Note:** The current example is limited to the ethernet interface on supported devices.
-To use the example with a different interface, you will need to modify main.cpp and
+To use the example with a different interface, you need to modify `main.cpp` and
 replace the EthernetInterface class with the appropriate interface.
 
 **Note:** The default serial port baud rate is 9600 bit/s.
@@ -26,7 +26,7 @@ Done
 
 ### Documentation ###
 
-More information on the network-socket API can be found in the [mbed handbook](https://docs.mbed.com/docs/mbed-os-api-reference/en/latest/APIs/communication/network_sockets/).
+You can find more information on the network socket API in the [API reference documentation](https://os.mbed.com/docs/latest/reference/network-socket.html).
 
 ## Troubleshooting
 
