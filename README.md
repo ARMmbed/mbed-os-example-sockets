@@ -10,9 +10,17 @@ transaction over a TCPSocket.
 To use the example with a different interface, you will need to modify main.cpp and
 replace the EthernetInterface class with the appropriate interface.
 
-**Note:** The default serial port baud rate is 9600 bit/s.
+### Building
+
+```
+mbed compile -t <toolchain> -m <target>
+```
+
+For example, building for K64F using GCC: `mbed compile -t GCC_ARM -m K64F`
 
 ### Expected output ###
+
+**Note:** The default serial port baud rate is 9600 bit/s.
 
 ```
 IP address: 10.118.14.45
