@@ -25,12 +25,20 @@ int main() {
     char *buffer = new char[256];
 
     // Send an HTTP request
-    strcpy(buffer, "GET / HTTP/1.1\r\nHost: api.ipify.org\r\n\r\n");
+    strcpy(buffer, "GET / HTTP/1.1\r\nHost: api.ipify.org\r\nConnection: close\r\n\r\n");
     int scount = socket.send(buffer, strlen(buffer));
     printf("sent %d [%.*s]\n", scount, strstr(buffer, "\r\n")-buffer, buffer);
 
     // Recieve an HTTP response and print out the response line
-    int rcount = socket.recv(buffer, 256);
+    int received = 0;
+    int remaining = 256;
+    int rcount = 0;
+    char *p = buffer;
+    while (0 != (received = socket.recv(p, remaining))) {
+        p += received;
+        rcount += received;
+        remaining -= received;
+    }
     printf("recv %d [%.*s]\n", rcount, strstr(buffer, "\r\n")-buffer, buffer);
 
     // The api.ipify.org service also gives us the device's external IP address
