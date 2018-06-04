@@ -1,4 +1,27 @@
 {
+    "config": {
+        "network-interface":{
+            "help": "options are ETHERNET, WIFI_ESP8266, WIFI_ODIN, WIFI_IDW0XX1, WIFI_RTW, MESH_LOWPAN_ND, MESH_THREAD",
+            "value": "ETHERNET"
+        },
+        "esp8266-tx": {
+            "help": "Pin used as TX (connects to ESP8266 RX)",
+            "value": "PTD3"
+        },
+        "esp8266-rx": {
+            "help": "Pin used as RX (connects to ESP8266 TX)",
+            "value": "PTD2"
+        },
+        "esp8266-debug": {
+            "value": false
+        },
+        "wifi-ssid": {
+            "value": "\"SSID\""
+        },
+        "wifi-password": {
+            "value": "\"password\""
+        }
+    },
     "target_overrides": {
         "*": {
             "platform.stdio-convert-newlines": true

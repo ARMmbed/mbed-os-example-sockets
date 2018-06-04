@@ -6,9 +6,7 @@ This is a quick example of a simple HTTP client program using the
 The program brings up an underlying network interface, and uses it to perform an HTTP
 transaction over a TCPSocket.
 
-**Note:** The current example is limited to the ethernet interface on supported devices.
-To use the example with a different interface, you will need to modify main.cpp and
-replace the EthernetInterface class with the appropriate interface.
+This example uses [easy-connect](https://github.com/ARMmbed/easy-connect/) as the network bearer abstraction model. Please configure the `mbed_app.json` accordingly to use the network stack you want to use.
 
 ### Building
 
@@ -23,12 +21,17 @@ For example, building for K64F using GCC: `mbed compile -t GCC_ARM -m K64F`
 **Note:** The default serial port baud rate is 9600 bit/s.
 
 ```
-IP address: 10.118.14.45
-Netmask: 255.255.252.0
-Gateway: 10.118.12.1
-sent 39 [GET / HTTP/1.1]
-recv 173 [HTTP/1.1 200 OK]
-External IP address: 217.140.111.135
+[EasyConnect] IPv4 mode
+[EasyConnect] Using Ethernet
+[EasyConnect] Connected to Network successfully
+[EasyConnect] MAC address 02:46:38:b7:e9:a8
+[EasyConnect] IP address 10.45.0.44
+IP address: 10.45.0.44
+Netmask: 255.255.254.0
+Gateway: 10.45.0.1
+sent 58 [GET / HTTP/1.1]https://github.com/ARMmbed/easy-connect/
+recv 181 [HTTP/1.1 200 OK]
+External IP address: 217.140.96.140
 Done
 ```
 

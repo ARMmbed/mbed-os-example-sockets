@@ -1,26 +1,27 @@
 #include "mbed.h"
-#include "EthernetInterface.h"
-
-// Network interface
-EthernetInterface net;
+#include "easy-connect.h"
 
 // Socket demo
 int main() {
-    // Bring up the ethernet interface
-    printf("Ethernet socket example\n");
-    net.connect();
+
+    // Use easy-connect for abstract network handling.
+    NetworkInterface* net = easy_connect(true);
+    if (!net) {
+        printf("ERROR - connecting to the network failed... See serial output.\r\n");
+        return 1;
+    }
 
     // Show the network address
-    const char *ip = net.get_ip_address();
-    const char *netmask = net.get_netmask();
-    const char *gateway = net.get_gateway();
+    const char *ip = net->get_ip_address();
+    const char *netmask = net->get_netmask();
+    const char *gateway = net->get_gateway();
     printf("IP address: %s\n", ip ? ip : "None");
     printf("Netmask: %s\n", netmask ? netmask : "None");
     printf("Gateway: %s\n", gateway ? gateway : "None");
 
     // Open a socket on the network interface, and create a TCP connection to mbed.org
     TCPSocket socket;
-    socket.open(&net);
+    socket.open(net);
     socket.connect("api.ipify.org", 80);
     char *buffer = new char[256];
 
@@ -50,6 +51,6 @@ int main() {
     delete[] buffer;
 
     // Bring down the ethernet interface
-    net.disconnect();
+    net->disconnect();
     printf("Done\n");
 }
