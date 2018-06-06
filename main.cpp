@@ -6,9 +6,18 @@ EthernetInterface net;
 
 // Socket demo
 int main() {
+    int remaining;
+    int rcount;
+    char *p;
+    char *buffer = new char[256];
+    nsapi_size_or_error_t r;
+
     // Bring up the ethernet interface
     printf("Ethernet socket example\n");
-    net.connect();
+    r = net.connect();
+    if (r != 0) {
+        printf("Error! net.connect() returned: %d\n", r);
+    }
 
     // Show the network address
     const char *ip = net.get_ip_address();
@@ -20,34 +29,55 @@ int main() {
 
     // Open a socket on the network interface, and create a TCP connection to mbed.org
     TCPSocket socket;
-    socket.open(&net);
-    socket.connect("api.ipify.org", 80);
-    char *buffer = new char[256];
-
-    // Send an HTTP request
-    strcpy(buffer, "GET / HTTP/1.1\r\nHost: api.ipify.org\r\nConnection: close\r\n\r\n");
-    int scount = socket.send(buffer, strlen(buffer));
-    printf("sent %d [%.*s]\n", scount, strstr(buffer, "\r\n")-buffer, buffer);
-
-    // Recieve an HTTP response and print out the response line
-    int received = 0;
-    int remaining = 256;
-    int rcount = 0;
-    char *p = buffer;
-    while (0 != (received = socket.recv(p, remaining))) {
-        p += received;
-        rcount += received;
-        remaining -= received;
+    r = socket.open(&net);
+    if (r != 0) {
+        printf("Error! socket.open() returned: %d\n", r);
     }
+
+    r = socket.connect("api.ipify.org", 80);
+    if (r != 0) {
+        printf("Error! socket.connect() returned: %d\n", r);
+    }
+
+    // Send a simple http request
+    char sbuffer[] = "GET / HTTP/1.1\r\nHost: api.ipify.org\r\nConnection: close\r\n\r\n";
+    nsapi_size_t size = strlen(sbuffer);
+
+    // Loop until whole request send
+    while(size) {
+        r = socket.send(sbuffer+r, size);
+        if (r < 0) {
+            printf("Error! socket.connect() returned: %d\n", r);
+            goto disconnect;
+        }
+        size -= r;
+        printf("sent %d [%.*s]\n", r, strstr(sbuffer, "\r\n")-sbuffer, sbuffer);
+    }
+
+    // Receieve an HTTP response and print out the response line
+    remaining = 256;
+    rcount = 0;
+    p = buffer;
+    while (0 < (r = socket.recv(p, remaining))) {
+        p += r;
+        rcount += r;
+        remaining -= r;
+    }
+    if (r < 0) {
+        printf("Error! socket.recv() returned: %d\n", r);
+        goto disconnect;
+    }
+
     printf("recv %d [%.*s]\n", rcount, strstr(buffer, "\r\n")-buffer, buffer);
 
     // The api.ipify.org service also gives us the device's external IP address
-    const char *payload = strstr(buffer, "\r\n\r\n")+4;
-    printf("External IP address: %.*s\n", rcount-(payload-buffer), payload);
+    p = strstr(buffer, "\r\n\r\n")+4;
+    printf("External IP address: %.*s\n", rcount-(p-buffer), p);
+    delete[] buffer;
 
+disconnect:
     // Close the socket to return its memory and bring down the network interface
     socket.close();
-    delete[] buffer;
 
     // Bring down the ethernet interface
     net.disconnect();
