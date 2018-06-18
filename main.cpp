@@ -14,6 +14,11 @@ int main() {
 
     // Bring up the ethernet interface
     printf("Ethernet socket example\n");
+
+#ifdef MBED_MAJOR_VERSION
+    printf("Mbed OS version %d.%d.%d\n\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
+#endif
+
     r = net.connect();
     if (r != 0) {
         printf("Error! net.connect() returned: %d\n", r);
