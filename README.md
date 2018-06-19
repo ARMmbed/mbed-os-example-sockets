@@ -1,4 +1,4 @@
-### Getting started with the network-socket API ###
+## Getting started with the network-socket API
 
 This is a quick example of a simple HTTP client program using the
 [network-socket API](https://os.mbed.com/docs/latest/reference/network-socket.html) that [Mbed OS](https://github.com/ARMmbed/mbed-os) provides.
@@ -6,9 +6,15 @@ This is a quick example of a simple HTTP client program using the
 The program brings up an underlying network interface, and uses it to perform an HTTP
 transaction over a TCPSocket.
 
-**Note:** The current example is limited to the ethernet interface on supported devices.
-To use the example with a different interface, you will need to modify main.cpp and
-replace the EthernetInterface class with the appropriate interface.
+### Selecting the network interface
+
+This application is able to use any network inteface it finds. Please see the Mbed OS documentationg for [selecting the default network interface](https://os.mbed.com/docs/v5.9/reference/configuration-connectivity.html#selecting-the-default-network-interface).
+
+For example, building on Ethernet enabled boards, you do not do any configuration.
+
+Building for WiFi boards, you need to provide SSID, password and security settings in `mbed_app.json` as instructed in the documentation.
+
+Building for boards that have more that one network interface, you might need to override `target.network-default-interface-type` variable.
 
 ### Building
 

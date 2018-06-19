@@ -1,8 +1,7 @@
 #include "mbed.h"
-#include "EthernetInterface.h"
 
 // Network interface
-EthernetInterface net;
+NetworkInterface *net;
 
 // Socket demo
 int main() {
@@ -13,28 +12,35 @@ int main() {
     nsapi_size_or_error_t r;
 
     // Bring up the ethernet interface
-    printf("Ethernet socket example\n");
+    printf("Mbed OS Socket example\n");
 
 #ifdef MBED_MAJOR_VERSION
-    printf("Mbed OS version %d.%d.%d\n\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
+    printf("Mbed OS version: %d.%d.%d\n\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
 #endif
 
-    r = net.connect();
+    net = NetworkInterface::get_default_instance();
+
+    if (!net) {
+        printf("Error! No network inteface found.\n");
+        return 0;
+    }
+
+    r = net->connect();
     if (r != 0) {
-        printf("Error! net.connect() returned: %d\n", r);
+        printf("Error! net->connect() returned: %d\n", r);
     }
 
     // Show the network address
-    const char *ip = net.get_ip_address();
-    const char *netmask = net.get_netmask();
-    const char *gateway = net.get_gateway();
+    const char *ip = net->get_ip_address();
+    const char *netmask = net->get_netmask();
+    const char *gateway = net->get_gateway();
     printf("IP address: %s\n", ip ? ip : "None");
     printf("Netmask: %s\n", netmask ? netmask : "None");
     printf("Gateway: %s\n", gateway ? gateway : "None");
 
     // Open a socket on the network interface, and create a TCP connection to mbed.org
     TCPSocket socket;
-    r = socket.open(&net);
+    r = socket.open(net);
     if (r != 0) {
         printf("Error! socket.open() returned: %d\n", r);
     }
@@ -85,6 +91,6 @@ disconnect:
     socket.close();
 
     // Bring down the ethernet interface
-    net.disconnect();
+    net->disconnect();
     printf("Done\n");
 }
