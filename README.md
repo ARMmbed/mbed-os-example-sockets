@@ -12,7 +12,21 @@ This application is able to use any network inteface it finds. Please see the Mb
 
 For example, building on Ethernet enabled boards, you do not do any configuration.
 
-Building for WiFi boards, you need to provide SSID, password and security settings in `mbed_app.json` as instructed in the documentation.
+Building for WiFi boards, you need to provide SSID, password and security settings in `mbed_app.json` as instructed in the documentation. For example, like this:
+
+```
+{
+    "target_overrides": {
+        "*": {
+            "platform.stdio-convert-newlines": true,
+            "target.network-default-interface-type": "WIFI",
+            "nsapi.default-wifi-security": "WPA_WPA2",
+            "nsapi.default-wifi-ssid": "\"ssid\"",
+            "nsapi.default-wifi-password": "\"password\""
+        }
+    }
+}
+```
 
 Building for boards that have more that one network interface, you might need to override `target.network-default-interface-type` variable.
 
