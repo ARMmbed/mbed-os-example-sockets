@@ -40,6 +40,10 @@ int main() {
 
     // Open a socket on the network interface, and create a TCP connection to mbed.org
     TCPSocket socket;
+    // Send a simple http request
+    char sbuffer[] = "GET / HTTP/1.1\r\nHost: api.ipify.org\r\nConnection: close\r\n\r\n";
+    nsapi_size_t size = strlen(sbuffer);
+
     r = socket.open(net);
     if (r != 0) {
         printf("Error! socket.open() returned: %d\n", r);
@@ -48,18 +52,15 @@ int main() {
     r = socket.connect("api.ipify.org", 80);
     if (r != 0) {
         printf("Error! socket.connect() returned: %d\n", r);
+        goto DISCONNECT;
     }
-
-    // Send a simple http request
-    char sbuffer[] = "GET / HTTP/1.1\r\nHost: api.ipify.org\r\nConnection: close\r\n\r\n";
-    nsapi_size_t size = strlen(sbuffer);
 
     // Loop until whole request send
     while(size) {
         r = socket.send(sbuffer+r, size);
         if (r < 0) {
-            printf("Error! socket.connect() returned: %d\n", r);
-            goto disconnect;
+            printf("Error! socket.send() returned: %d\n", r);
+            goto DISCONNECT;
         }
         size -= r;
         printf("sent %d [%.*s]\n", r, strstr(sbuffer, "\r\n")-sbuffer, sbuffer);
@@ -76,7 +77,7 @@ int main() {
     }
     if (r < 0) {
         printf("Error! socket.recv() returned: %d\n", r);
-        goto disconnect;
+        goto DISCONNECT;
     }
 
     printf("recv %d [%.*s]\n", rcount, strstr(buffer, "\r\n")-buffer, buffer);
@@ -86,7 +87,7 @@ int main() {
     printf("External IP address: %.*s\n", rcount-(p-buffer), p);
     delete[] buffer;
 
-disconnect:
+DISCONNECT:
     // Close the socket to return its memory and bring down the network interface
     socket.close();
 
