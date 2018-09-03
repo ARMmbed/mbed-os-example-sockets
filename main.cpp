@@ -28,6 +28,7 @@ int main() {
     r = net->connect();
     if (r != 0) {
         printf("Error! net->connect() returned: %d\n", r);
+        return r;
     }
 
     // Show the network address
