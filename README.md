@@ -8,7 +8,7 @@ transaction over a TCPSocket.
 
 ### Selecting the network interface
 
-This application is able to use any network inteface it finds. Please see the Mbed OS documentationg for [selecting the default network interface](https://os.mbed.com/docs/v5.9/reference/configuration-connectivity.html#selecting-the-default-network-interface).
+This application is able to use any network inteface it finds. Please see the Mbed OS documentationg for [selecting the default network interface](https://os.mbed.com/docs/v5.10/apis/network-interfaces.html).
 
 For example, building on Ethernet enabled boards, you do not do any configuration.
 
