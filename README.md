@@ -1,5 +1,7 @@
 ## Getting started with the network-socket API
 
+(Note: To see this example in a rendered form you can import into the Arm Mbed Online Compiler, please see [the documentation](https://os.mbed.com/docs/mbed-os/latest/apis/socket.html#socket-example).)
+
 This is a quick example of a simple HTTP client program using the
 [network-socket API](https://os.mbed.com/docs/latest/reference/network-socket.html) that [Mbed OS](https://github.com/ARMmbed/mbed-os) provides.
 
