@@ -39,10 +39,10 @@ int main() {
     printf("Netmask: %s\n", netmask ? netmask : "None");
     printf("Gateway: %s\n", gateway ? gateway : "None");
 
-    // Open a socket on the network interface, and create a TCP connection to api.ipify.org
+    // Open a socket on the network interface, and create a TCP connection to ifconfig.io
     TCPSocket socket;
     // Send a simple http request
-    char sbuffer[] = "GET / HTTP/1.1\r\nHost: api.ipify.org\r\nConnection: close\r\n\r\n";
+    char sbuffer[] = "GET / HTTP/1.1\r\nHost: ifconfig.io\r\nConnection: close\r\n\r\n";
     nsapi_size_t size = strlen(sbuffer);
 
     result = socket.open(net);
@@ -50,7 +50,7 @@ int main() {
         printf("Error! socket.open() returned: %d\n", result);
     }
 
-    result = socket.connect("api.ipify.org", 80);
+    result = socket.connect("ifconfig.io", 80);
     if (result != 0) {
         printf("Error! socket.connect() returned: %d\n", result);
         goto DISCONNECT;
@@ -71,7 +71,7 @@ int main() {
     remaining = 256;
     rcount = 0;
     p = buffer;
-    while (0 < (result = socket.recv(p, remaining))) {
+    while (remaining > 0 && 0 < (result = socket.recv(p, remaining))) {
         p += result;
         rcount += result;
         remaining -= result;
@@ -83,9 +83,6 @@ int main() {
 	// the HTTP response code
     printf("recv %d [%.*s]\n", rcount, strstr(buffer, "\r\n")-buffer, buffer);
 
-    // The api.ipify.org service also gives us the device's external IP address
-    p = strstr(buffer, "\r\n\r\n")+4;
-    printf("External IP address: %.*s\n", rcount-(p-buffer), p);
     delete[] buffer;
 
 DISCONNECT:
