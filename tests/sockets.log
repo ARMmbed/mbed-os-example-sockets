@@ -1,0 +1,9 @@
+Mbed OS Socket example
+Mbed OS version:
+
+IP address: (?:[0-9]{1,3}\.){3}[0-9]{1,3}
+Netmask: (?:[0-9]{1,3}\.){3}[0-9]{1,3}
+Gateway: (?:[0-9]{1,3}\.){3}[0-9]{1,3}
+sent \d+ \[GET \/ HTTP\/\d.\d\]
+recv \d+ \[HTTP\/\d.\d \d+ OK\]
+Done
