@@ -32,12 +32,13 @@ int main() {
     }
 
     // Show the network address
-    const char *ip = net->get_ip_address();
-    const char *netmask = net->get_netmask();
-    const char *gateway = net->get_gateway();
-    printf("IP address: %s\n", ip ? ip : "None");
-    printf("Netmask: %s\n", netmask ? netmask : "None");
-    printf("Gateway: %s\n", gateway ? gateway : "None");
+    SocketAddress a;
+    net->get_ip_address(&a);
+    printf("IP address: %s\n", a.get_ip_address() ? a.get_ip_address() : "None");
+    net->get_netmask(&a);
+    printf("Netmask: %s\n", a.get_ip_address() ? a.get_ip_address() : "None");
+    net->get_gateway(&a);
+    printf("Gateway: %s\n", a.get_ip_address() ? a.get_ip_address() : "None");
 
     // Open a socket on the network interface, and create a TCP connection to ifconfig.io
     TCPSocket socket;
