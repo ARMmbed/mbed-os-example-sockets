@@ -118,8 +118,6 @@ def run_smoke(raasName, suite_to_run, toolchains, targets) {
           execute("git checkout ${env.LATEST_CLITEST_STABLE_REL}")
           dir("mbed-clitest-suites") {
             git "git@github.com:ARMmbed/mbed-clitest-suites.git"
-            //execute("git submodule update --init --recursive")
-            //execute("git all checkout master")
             dir("cellular") {
               git "git@github.com:ARMmbed/mbed-clitest-cellular.git"
             }
