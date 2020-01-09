@@ -45,11 +45,17 @@ For example, building for K64F using GCC: `mbed compile -t GCC_ARM -m K64F`
 **Note:** The default serial port baud rate is 9600 bit/s.
 
 ```
-IP address: 10.118.14.45
-Netmask: 255.255.252.0
-Gateway: 10.118.12.1
-sent 39 [GET / HTTP/1.1]
-recv 173 [HTTP/1.1 200 OK]
+Mbed OS Socket example
+Mbed OS version: 5.15.0
+
+IP address: 10.45.3.17
+Netmask: 255.255.255.0
+Gateway: 10.45.3.1
+
+Resolve hostname ifconfig.io
+ifconfig.io address is 104.24.122.146
+sent 56 [GET / HTTP/1.1]
+recv 256 [HTTP/1.1 200 OK]
 Done
 ```
 
