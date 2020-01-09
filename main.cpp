@@ -51,7 +51,12 @@ int main() {
         printf("Error! socket.open() returned: %d\n", result);
     }
 
-    result = socket.connect("ifconfig.io", 80);
+    result = net->gethostbyname("ifconfig.io", &a);
+    if (result != 0) {
+        printf("Error! Could not resolve host ifconfig.io. Result: %d\n", result);
+    }
+    a.set_port(80);
+    result = socket.connect(a);
     if (result != 0) {
         printf("Error! socket.connect() returned: %d\n", result);
         goto DISCONNECT;
