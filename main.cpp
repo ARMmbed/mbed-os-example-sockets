@@ -8,7 +8,7 @@ int main() {
     int remaining;
     int rcount;
     char *p;
-    char *buffer = new char[256];
+    char buffer[256];
     nsapi_size_or_error_t result;
 
     // Bring up the ethernet interface
@@ -43,27 +43,36 @@ int main() {
     // Open a socket on the network interface, and create a TCP connection to ifconfig.io
     TCPSocket socket;
     // Send a simple http request
+    char hostname[] = "ifconfig.io";
     char sbuffer[] = "GET / HTTP/1.1\r\nHost: ifconfig.io\r\nConnection: close\r\n\r\n";
     nsapi_size_t size = strlen(sbuffer);
 
     result = socket.open(net);
     if (result != 0) {
         printf("Error! socket.open() returned: %d\n", result);
+        goto DISCONNECT;
     }
 
-    result = net->gethostbyname("ifconfig.io", &a);
+    // Get the host address
+    printf("\nResolve hostname %s\n", hostname);
+    result = net->gethostbyname(hostname, &a);
     if (result != 0) {
-        printf("Error! Could not resolve host ifconfig.io. Result: %d\n", result);
+        printf("Error! gethostbyname(%s) returned: %d\n", hostname, result);
+        net->disconnect();
+        exit(-1);
     }
+    printf("%s address is %s\n", hostname, (a.get_ip_address() ? a.get_ip_address() : "None") );
+
     a.set_port(80);
     result = socket.connect(a);
     if (result != 0) {
         printf("Error! socket.connect() returned: %d\n", result);
-        goto DISCONNECT;
+        net->disconnect();
+        exit(-2);
     }
 
     // Loop until whole request sent
-    while(size) {
+    while (size) {
         result = socket.send(sbuffer+result, size);
         if (result < 0) {
             printf("Error! socket.send() returned: %d\n", result);
@@ -89,9 +98,8 @@ int main() {
 	// the HTTP response code
     printf("recv %d [%.*s]\n", rcount, strstr(buffer, "\r\n")-buffer, buffer);
 
-    delete[] buffer;
-
 DISCONNECT:
+
     // Close the socket to return its memory and bring down the network interface
     socket.close();
 
