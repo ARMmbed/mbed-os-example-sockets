@@ -1,3 +1,4 @@
+![](./resources/official_armmbed_example_badge.png)
 ## Getting started with the network-socket API
 
 (Note: To see this example in a rendered form you can import into the Arm Mbed Online Compiler, please see [the documentation](https://os.mbed.com/docs/mbed-os/latest/apis/socket.html#socket-example).)
