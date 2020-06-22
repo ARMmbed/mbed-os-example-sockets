@@ -23,7 +23,6 @@ def raas = [
 
 // List of targets with supported RF shields to compile
 def targets = [
-  "UBLOX_EVK_ODIN_W2",
   "K64F",
   "NUCLEO_F429ZI"
   ]
@@ -31,8 +30,7 @@ def targets = [
 // Map toolchains to compilers
 def toolchains = [
   ARM: "armcc",
-  GCC_ARM: "arm-none-eabi-gcc",
-  IAR: "IAR-linux"
+  GCC_ARM: "arm-none-eabi-gcc"
   ]
 
 def stepsForParallel = [:]
