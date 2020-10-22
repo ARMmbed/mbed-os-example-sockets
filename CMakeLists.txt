@@ -19,7 +19,7 @@ mbed_set_mbed_target_linker_script(${APP_TARGET})
 project(${APP_TARGET})
 
 # Provide Mbed OS with the header file it needs to configure Mbed TLS for LoRa
-target_include_directories(mbed-os
+target_include_directories(${APP_TARGET}
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
@@ -30,8 +30,9 @@ target_sources(${APP_TARGET}
 )
 
 target_link_libraries(${APP_TARGET}
-    mbed-os
-    mbed-os-netsocket
+    PRIVATE
+        mbed-os
+        mbed-netsocket
 )
 
 mbed_generate_bin_hex(${APP_TARGET})
