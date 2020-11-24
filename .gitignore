@@ -1,0 +1,17 @@
+.DS_Store
+
+# clion
+.idea/
+cmake-build-*/
+
+# exporters
+GettingStarted.html
+eclipse-extras/
+
+# mbed build system
+mbed-os/
+mbed_settings.py
+mbed_config.h
+*.pyc
+BUILD/
+cmake-build-debug/
