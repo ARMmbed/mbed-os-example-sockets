@@ -83,6 +83,8 @@ Please have a client open and connected to the board. You may use:
 
 - screen or minicom for Linux (example usage: `screen /dev/serial/<your board> 115200`)
 
+- mbed tools have terminal command `mbed term -b 115200`
+
 ### Expected output
 
 (Assuming you are using a wifi interface, otherwise the scanning will be skipped)
