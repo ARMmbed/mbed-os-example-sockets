@@ -21,9 +21,9 @@ class SocketDemo {
     static const size_t MAX_MESSAGE_RECEIVED_LENGTH = 100;
 
 public:
-    SocketDemo()
+    SocketDemo() : _net(NetworkInterface::get_default_instance())
     {
-        _net = NetworkInterface::get_default_instance();
+
     }
 
     ~SocketDemo()
