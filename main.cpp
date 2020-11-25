@@ -113,7 +113,11 @@ private:
     bool send_http_request()
     {
         /* loop until whole request sent */
-        const char buffer[] = "GET / HTTP/1.1\nHost: ifconfig.io\nConnection: close\n\n";
+        const char buffer[] = R"(GET / HTTP/1.1
+Host: ifconfig.io
+Connection: close
+
+)";
 
         nsapi_size_t bytes_to_send = strlen(buffer);
 
