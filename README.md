@@ -1,7 +1,7 @@
 ![](./resources/official_armmbed_example_badge.png)
 # Socket Example
 
-This example shows usage of [network-socket API](https://os.mbed.com/docs/latest/reference/network-socket.html).
+This example shows usage of [network-socket API](https://os.mbed.com/docs/mbed-os/latest/apis/network-socket.html).
 
 The program brings up an underlying network interface and if it's Wifi also scans for access points.
 It creates a TCPSocket and performs an HTTP transaction targeting the website in the `mbed_app.json` config.
@@ -12,9 +12,13 @@ please see [the documentation](https://os.mbed.com/docs/mbed-os/latest/apis/sock
 ## Selecting the network interface
 
 This application is able to use any network interface it finds.
-Please see the Mbed OS documentation for [selecting the default network interface](https://os.mbed.com/docs/v5.10/apis/network-interfaces.html).
 
-For example, building on Ethernet enabled boards, you do not need any further configuration.
+The interface selections is done through weak functions that are overridden by your selected target or any additional
+component that provides a network interface.
+
+If more than one interface is provided the target configuration `target.network-default-interface-type`
+selects the type provided as the default one. This is usually the Ethernet so building on Ethernet enabled boards,
+you do not need any further configuration.
 
 ### WiFi
 
@@ -32,32 +36,34 @@ If your board doesn't provide WiFi as the default interface because it has multi
 }
 ```
 
-For more information about Wi-Fi APIs, please visit the [Mbed OS Wi-Fi](https://os.mbed.com/docs/latest/reference/wi-fi.html) documentation.
+For more information about Wi-Fi APIs, please visit the [Mbed OS Wi-Fi](https://os.mbed.com/docs/mbed-os/latest/apis/wi-fi.html) documentation.
 
 ### Supported WiFi hardware
 
-* All Mbed OS boards with build-in Wi-Fi module:
+* All Mbed OS boards with build-in Wi-Fi module such as:
     * [ST DISCO IOT board](https://os.mbed.com/platforms/ST-Discovery-L475E-IOT01A/) with integrated [ISM43362 WiFi Inventek module](https://github.com/ARMmbed/wifi-ism43362).
     * [ST DISCO_F413ZH board](https://os.mbed.com/platforms/ST-Discovery-F413H/) with integrated [ISM43362 WiFi Inventek module](https://github.com/ARMmbed/wifi-ism43362).
-* Boards with external WiFi shields.
-    * [NUCLEO-F429ZI](https://os.mbed.com/platforms/ST-Nucleo-F429ZI/) with ESP8266-01 module using pins D1 and D0.
+* Boards with external WiFi shields such as:
+    * [NUCLEO-F429ZI](https://os.mbed.com/platforms/ST-Nucleo-F429ZI/) with ESP8266-01
 
 ## Building and flashing the example
 
 ### To build the example
 
-Clone the repository containing the collection of examples:
+Clone the repository containing example:
 
 ```
 git clone https://github.com/ARMmbed/mbed-os-example-sockets.git
-cd mbed-os-example-sockets
 ```
 
 **Tip:** If you don't have git installed, you can [download a zip file](https://github.com/ARMmbed/mbed-os-example-sockets/archive/master.zip) of the repository.
 
 Update the source tree:
 
-```mbed deploy```
+```
+cd mbed-os-example-sockets
+mbed deploy
+```
 
 Run the build:
 
@@ -69,6 +75,9 @@ Connect your mbed board to your computer over USB. It appears as removable stora
 
 When you run the `mbed compile` command above, mbed cli creates a .bin or a .hex file (depending on your target) in
 ```BUILD/<target-name>/<toolchain>``` under the example's directory. Drag and drop the file to the removable storage.
+
+Alternatively you may launch compilation with `-f` flag to have mbed tools attempt to flash your board.
+The tools will flash the binary to all targets that match the board specified by '-m' parameter. 
 
 ## Running the example
 
