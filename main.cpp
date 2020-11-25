@@ -40,7 +40,12 @@ public:
 
         /* if we're using a wifi interface run a quick scan */
         if (_net->wifiInterface()) {
+            /* the scan is not required to connect and only serves to show visible access points */
             wifi_scan();
+
+            /* in this example we use credentials configured at compile time which are used by
+             * NetworkInterface::connect() but it's possible to do this at runtime by using the
+             * WiFiInterface::connect() which takes these parameters as arguments */
         }
 
         /* connect will perform the action appropriate to the interface type to connect to the network */
