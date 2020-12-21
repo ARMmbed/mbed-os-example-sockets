@@ -15,15 +15,29 @@
  */
 
 #include "mbed.h"
+#include "wifi_helper.h"
+
+#if MBED_CONF_APP_USE_TLS_SOCKET
+#include "app_cert.h"
+
+#ifndef DEVICE_TRNG
+#error "mbed-os-example-tls-socket requires a device which supports TRNG"
+#endif
+#endif // MBED_CONF_APP_USE_TLS_SOCKET
 
 class SocketDemo {
     static const size_t MAX_NUMBER_OF_ACCESS_POINTS = 10;
     static const size_t MAX_MESSAGE_RECEIVED_LENGTH = 100;
 
+#if MBED_CONF_APP_USE_TLS_SOCKET
+    static const size_t REMOTE_PORT = 443; // tls port
+#else
+    static const size_t REMOTE_PORT = 80; // standard HTTP port
+#endif // MBED_CONF_APP_USE_TLS_SOCKET
+
 public:
     SocketDemo() : _net(NetworkInterface::get_default_instance())
     {
-
     }
 
     ~SocketDemo()
@@ -61,11 +75,19 @@ public:
         print_network_info();
 
         /* opening the socket only allocates resources */
-        result = socket.open(_net);
+        result = _socket.open(_net);
         if (result != 0) {
-            printf("Error! socket.open() returned: %d\r\n", result);
+            printf("Error! _socket.open() returned: %d\r\n", result);
             return;
         }
+
+#if MBED_CONF_APP_USE_TLS_SOCKET
+        result = _socket.set_root_ca_cert(app_cert);
+        if (result != NSAPI_ERROR_OK) {
+            printf("Error: _socket.set_root_ca_cert() returned %d\n", result);
+            return;
+        }
+#endif // MBED_CONF_APP_USE_TLS_SOCKET
 
         /* now we have to find where to connect */
         SocketAddress address;
@@ -74,13 +96,12 @@ public:
             return;
         }
 
-        /* set standard HTTP port */
-        address.set_port(80);
+        address.set_port(REMOTE_PORT);
 
         /* finally connect */
-        result = socket.connect(address);
+        result = _socket.connect(address);
         if (result != 0) {
-            printf("Error! socket.connect() returned: %d\r\n", result);
+            printf("Error! _socket.connect() returned: %d\r\n", result);
             return;
         }
 
@@ -118,18 +139,14 @@ private:
     bool send_http_request()
     {
         /* loop until whole request sent */
-        const char buffer[] = R"(GET / HTTP/1.1
-Host: ifconfig.io
-Connection: close
-
-)";
+        const char buffer[] = "GET / HTTP/1.1\r\nHost: ifconfig.io\r\nConnection: close\r\n\r\n";
 
         nsapi_size_t bytes_to_send = strlen(buffer);
 
         while (bytes_to_send) {
-            nsapi_size_or_error_t result = socket.send(buffer + result, bytes_to_send);
+            nsapi_size_or_error_t result = _socket.send(buffer + result, bytes_to_send);
             if (result < 0) {
-                printf("Error! socket.send() returned: %d\r\n", result);
+                printf("Error! _socket.send() returned: %d\r\n", result);
                 return false;
             }
 
@@ -149,9 +166,9 @@ Connection: close
 
         /* loop until there is nothing received or we've ran out of buffer space */
         while (remaining_bytes > 0) {
-            nsapi_size_or_error_t result = socket.recv(buffer + received_bytes, remaining_bytes);
+            nsapi_size_or_error_t result = _socket.recv(buffer + received_bytes, remaining_bytes);
             if (result < 0) {
-                printf("Error! socket.recv() returned: %d\r\n", result);
+                printf("Error! _socket.recv() returned: %d\r\n", result);
                 return false;
             }
 
@@ -204,28 +221,14 @@ Connection: close
         printf("Gateway: %s\r\n", a.get_ip_address() ? a.get_ip_address() : "None");
     }
 
-    static const char *get_security_string(nsapi_security_t sec)
-    {
-        switch (sec) {
-            case NSAPI_SECURITY_NONE:
-                return "None";
-            case NSAPI_SECURITY_WEP:
-                return "WEP";
-            case NSAPI_SECURITY_WPA:
-                return "WPA";
-            case NSAPI_SECURITY_WPA2:
-                return "WPA2";
-            case NSAPI_SECURITY_WPA_WPA2:
-                return "WPA/WPA2";
-            case NSAPI_SECURITY_UNKNOWN:
-            default:
-                return "Unknown";
-        }
-    }
-
 private:
     NetworkInterface *_net;
-    TCPSocket socket;
+
+#if MBED_CONF_APP_USE_TLS_SOCKET
+    TLSSocket _socket;
+#else
+    TCPSocket _socket;
+#endif // MBED_CONF_APP_USE_TLS_SOCKET
 };
 
 int main() {
