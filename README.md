@@ -6,6 +6,8 @@ This example shows usage of [network-socket API](https://os.mbed.com/docs/mbed-o
 The program brings up an underlying network interface and if it's Wifi also scans for access points.
 It creates a TCPSocket and performs an HTTP transaction targeting the website in the `mbed_app.json` config.
 
+The example can be configured to use a TLSSocket. This works only on devices that support TRNG.
+
 (Note: To see this example in a rendered form you can import into the Arm Mbed Online Compiler,
 please see [the documentation](https://os.mbed.com/docs/mbed-os/latest/apis/socket.html#socket-example).)
 
@@ -20,11 +22,39 @@ If more than one interface is provided the target configuration `target.network-
 selects the type provided as the default one. This is usually the Ethernet so building on Ethernet enabled boards,
 you do not need any further configuration.
 
+### Configuring mbedtls
+
+By default the examples uses a TCP socket. To enable TLS edit the mbed_app.json to turn on the `use-tls-socket` option:
+
+```
+        "use-tls-socket": {
+            "value": true
+        }
+```
+
+It might be necessary to configure the mbedtls library with appropriate macros in mbed_app.json file. Some boards
+(like UBLOX_EVK_ODIN_W2) will work fine without any additional configuration and some of them might require some minimal
+adjustment. For example K64F requires at least the following macro added:
+
+
+```
+        "K64F": {
+            "target.macros_add" : ["MBEDTLS_SHA1_C"]
+        }
+```
+
+See
+[mbedtls configuration guidelines](https://github.com/ARMmbed/mbed-os/tree/master/connectivity/mbedtls#configuring-mbed-tls-features)
+for more details.
+
+Also see the API Documentation [TLSSocket](https://os.mbed.com/docs/mbed-os/latest/apis/tlssocket.html).
+
 ### WiFi
 
 If you want to use WiFi you need to provide SSID, password and security settings in `mbed_app.json`.
 
-If your board doesn't provide WiFi as the default interface because it has multiple interfaces you need to specify that you want WiFi in `mbed_app.json`.
+If your board doesn't provide WiFi as the default interface because it has multiple interfaces you need to specify that
+you want WiFi in `mbed_app.json`.
 
 ```
 {
@@ -36,13 +66,17 @@ If your board doesn't provide WiFi as the default interface because it has multi
 }
 ```
 
-For more information about Wi-Fi APIs, please visit the [Mbed OS Wi-Fi](https://os.mbed.com/docs/mbed-os/latest/apis/wi-fi.html) documentation.
+For more information about Wi-Fi APIs, please visit the
+[Mbed OS Wi-Fi](https://os.mbed.com/docs/mbed-os/latest/apis/wi-fi.html)
+documentation.
 
 ### Supported WiFi hardware
 
 * All Mbed OS boards with build-in Wi-Fi module such as:
-    * [ST DISCO IOT board](https://os.mbed.com/platforms/ST-Discovery-L475E-IOT01A/) with integrated [ISM43362 WiFi Inventek module](https://github.com/ARMmbed/wifi-ism43362).
-    * [ST DISCO_F413ZH board](https://os.mbed.com/platforms/ST-Discovery-F413H/) with integrated [ISM43362 WiFi Inventek module](https://github.com/ARMmbed/wifi-ism43362).
+    * [ST DISCO IOT board](https://os.mbed.com/platforms/ST-Discovery-L475E-IOT01A/) with integrated
+      [ISM43362 WiFi Inventek module](https://github.com/ARMmbed/wifi-ism43362).
+    * [ST DISCO_F413ZH board](https://os.mbed.com/platforms/ST-Discovery-F413H/) with integrated
+      [ISM43362 WiFi Inventek module](https://github.com/ARMmbed/wifi-ism43362).
 * Boards with external WiFi shields such as:
     * [NUCLEO-F429ZI](https://os.mbed.com/platforms/ST-Nucleo-F429ZI/) with ESP8266-01
 
@@ -56,7 +90,9 @@ Clone the repository containing example:
 git clone https://github.com/ARMmbed/mbed-os-example-sockets.git
 ```
 
-**Tip:** If you don't have git installed, you can [download a zip file](https://github.com/ARMmbed/mbed-os-example-sockets/archive/master.zip) of the repository.
+**Tip:** If you don't have git installed, you can
+[download a zip file](https://github.com/ARMmbed/mbed-os-example-sockets/archive/master.zip)
+of the repository.
 
 Update the source tree:
 
@@ -92,7 +128,7 @@ Please have a client open and connected to the board. You may use:
 
 - screen or minicom for Linux (example usage: `screen /dev/serial/<your board> 115200`)
 
-- mbed tools have terminal command `mbed term -b 115200`
+- mbed tools has a terminal command `mbed term -b 115200`
 
 ### Expected output
 
