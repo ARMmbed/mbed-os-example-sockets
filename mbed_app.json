@@ -1,8 +1,22 @@
 {
+    "config": {
+        "hostname": {
+            "help": "The demo will try to connect to this web address on port 80.",
+            "value": "\"ifconfig.io\""
+        }
+    },
     "target_overrides": {
         "*": {
-            "platform.stdio-convert-newlines": true,
-            "target.network-default-interface-type": "ETHERNET"
+            "nsapi.default-wifi-security": "WPA_WPA2",
+            "nsapi.default-wifi-ssid": "\"YOUR_SSID\"",
+            "nsapi.default-wifi-password": "\"YOUR_PASSWORD\"",
+            "platform.stdio-baud-rate": 115200
+        },
+        "DISCO_F413ZH": {
+            "target.components_add": ["ism43362"]
+        },
+        "DISCO_L475VG_IOT01A": {
+            "target.components_add": ["ism43362"]
         }
     }
 }

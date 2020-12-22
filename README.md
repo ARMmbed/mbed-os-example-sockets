@@ -1,76 +1,133 @@
 ![](./resources/official_armmbed_example_badge.png)
-## Getting started with the network-socket API
+# Socket Example
 
-(Note: To see this example in a rendered form you can import into the Arm Mbed Online Compiler, please see [the documentation](https://os.mbed.com/docs/mbed-os/latest/apis/socket.html#socket-example).)
+This example shows usage of [network-socket API](https://os.mbed.com/docs/mbed-os/latest/apis/network-socket.html).
 
-This is a quick example of a simple HTTP client program using the
-[network-socket API](https://os.mbed.com/docs/latest/reference/network-socket.html) that [Mbed OS](https://github.com/ARMmbed/mbed-os) provides.
+The program brings up an underlying network interface and if it's Wifi also scans for access points.
+It creates a TCPSocket and performs an HTTP transaction targeting the website in the `mbed_app.json` config.
 
-The program brings up an underlying network interface, and uses it to perform an HTTP
-transaction over a TCPSocket.
+(Note: To see this example in a rendered form you can import into the Arm Mbed Online Compiler,
+please see [the documentation](https://os.mbed.com/docs/mbed-os/latest/apis/socket.html#socket-example).)
 
-### Selecting the network interface
+## Selecting the network interface
 
-This application is able to use any network inteface it finds. Please see the Mbed OS documentationg for [selecting the default network interface](https://os.mbed.com/docs/v5.10/apis/network-interfaces.html).
+This application is able to use any network interface it finds.
 
-For example, building on Ethernet enabled boards, you do not do any configuration.
+The interface selections is done through weak functions that are overridden by your selected target or any additional
+component that provides a network interface.
 
-Building for WiFi boards, you need to provide SSID, password and security settings in `mbed_app.json` as instructed in the documentation. For example, like this:
+If more than one interface is provided the target configuration `target.network-default-interface-type`
+selects the type provided as the default one. This is usually the Ethernet so building on Ethernet enabled boards,
+you do not need any further configuration.
+
+### WiFi
+
+If you want to use WiFi you need to provide SSID, password and security settings in `mbed_app.json`.
+
+If your board doesn't provide WiFi as the default interface because it has multiple interfaces you need to specify that you want WiFi in `mbed_app.json`.
 
 ```
 {
     "target_overrides": {
         "*": {
-            "platform.stdio-convert-newlines": true,
             "target.network-default-interface-type": "WIFI",
-            "nsapi.default-wifi-security": "WPA_WPA2",
-            "nsapi.default-wifi-ssid": "\"ssid\"",
-            "nsapi.default-wifi-password": "\"password\""
         }
     }
 }
 ```
 
-Building for boards that have more that one network interface, you might need to override `target.network-default-interface-type` variable.
+For more information about Wi-Fi APIs, please visit the [Mbed OS Wi-Fi](https://os.mbed.com/docs/mbed-os/latest/apis/wi-fi.html) documentation.
 
-### Building
+### Supported WiFi hardware
+
+* All Mbed OS boards with build-in Wi-Fi module such as:
+    * [ST DISCO IOT board](https://os.mbed.com/platforms/ST-Discovery-L475E-IOT01A/) with integrated [ISM43362 WiFi Inventek module](https://github.com/ARMmbed/wifi-ism43362).
+    * [ST DISCO_F413ZH board](https://os.mbed.com/platforms/ST-Discovery-F413H/) with integrated [ISM43362 WiFi Inventek module](https://github.com/ARMmbed/wifi-ism43362).
+* Boards with external WiFi shields such as:
+    * [NUCLEO-F429ZI](https://os.mbed.com/platforms/ST-Nucleo-F429ZI/) with ESP8266-01
+
+## Building and flashing the example
+
+### To build the example
+
+Clone the repository containing example:
 
 ```
-mbed compile -t <toolchain> -m <target>
+git clone https://github.com/ARMmbed/mbed-os-example-sockets.git
 ```
 
-For example, building for K64F using GCC: `mbed compile -t GCC_ARM -m K64F`
+**Tip:** If you don't have git installed, you can [download a zip file](https://github.com/ARMmbed/mbed-os-example-sockets/archive/master.zip) of the repository.
 
-### Expected output ###
-
-**Note:** The default serial port baud rate is 9600 bit/s.
+Update the source tree:
 
 ```
-Mbed OS Socket example
-Mbed OS version: 5.15.0
+cd mbed-os-example-sockets
+mbed deploy
+```
 
-IP address: 10.45.3.17
+Run the build:
+
+```mbed compile -t <ARM | GCC_ARM> -m <YOUR_TARGET>```
+
+### To flash the example onto your board
+
+Connect your mbed board to your computer over USB. It appears as removable storage.
+
+When you run the `mbed compile` command above, mbed cli creates a .bin or a .hex file (depending on your target) in
+```BUILD/<target-name>/<toolchain>``` under the example's directory. Drag and drop the file to the removable storage.
+
+Alternatively you may launch compilation with `-f` flag to have mbed tools attempt to flash your board.
+The tools will flash the binary to all targets that match the board specified by '-m' parameter. 
+
+## Running the example
+
+
+When example application is running information about activity is printed over the serial connection.
+
+**Note:** The default serial baudrate has been set to 115200.
+
+Please have a client open and connected to the board. You may use:
+
+- [Tera Term](https://ttssh2.osdn.jp/index.html.en) for windows
+
+- screen or minicom for Linux (example usage: `screen /dev/serial/<your board> 115200`)
+
+- mbed tools have terminal command `mbed term -b 115200`
+
+### Expected output
+
+(Assuming you are using a wifi interface, otherwise the scanning will be skipped)
+
+```
+Starting socket demo
+
+2 networks available:
+Network: Virgin Media secured: Unknown BSSID: 2A:35:D1:ba:c7:41 RSSI: -79 Ch: 6
+Network: VM4392164 secured: WPA2 BSSID: 18:35:D1:ba:c7:41 RSSI: -79 Ch: 6
+
+Connecting to the network...
+IP address: 192.168.0.27
 Netmask: 255.255.255.0
-Gateway: 10.45.3.1
+Gateway: 192.168.0.1
 
 Resolve hostname ifconfig.io
 ifconfig.io address is 104.24.122.146
-sent 56 [GET / HTTP/1.1]
-recv 256 [HTTP/1.1 200 OK]
-Done
+
+sent 52 bytes: 
+GET / HTTP/1.1
+Host: ifconfig.io
+Connection: close
+
+received 256 bytes:
+HTTP/1.1 200 OK
+
+Demo concluded successfully 
 ```
-
-### Documentation ###
-
-More information on the network-socket API can be found in the [mbed handbook](https://docs.mbed.com/docs/mbed-os-api-reference/en/latest/APIs/communication/network_sockets/).
-
-## Troubleshooting
-
-If you have problems, you can review the [documentation](https://os.mbed.com/docs/latest/tutorials/debugging.html) for suggestions on what could be wrong and how to fix it.
 
 ## License and contributions
 
-The software is provided under Apache-2.0 license. Contributions to this project are accepted under the same license. Please see [contributing.md](CONTRIBUTING.md) for more info.
+The software is provided under Apache-2.0 license. Contributions to this project are accepted under the same license.
+Please see [contributing.md](CONTRIBUTING.md) for more info.
 
-This project contains code from other projects. The original license text is included in those source files. They must comply with our license guide.
-
+This project contains code from other projects. The original license text is included in those source files.
+They must comply with our license guide
