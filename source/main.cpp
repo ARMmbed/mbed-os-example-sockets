@@ -147,7 +147,10 @@ private:
     bool send_http_request()
     {
         /* loop until whole request sent */
-        const char buffer[] = "GET / HTTP/1.1\r\nHost: ifconfig.io\r\nConnection: close\r\n\r\n";
+        const char buffer[] = "GET / HTTP/1.1\r\n"
+                              "Host: ifconfig.io\r\n"
+                              "Connection: close\r\n"
+                              "\r\n";
 
         nsapi_size_t bytes_to_send = strlen(buffer);
         nsapi_size_or_error_t bytes_sent = 0;
