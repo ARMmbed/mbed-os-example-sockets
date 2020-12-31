@@ -18,7 +18,7 @@
 #include "wifi_helper.h"
 
 #if MBED_CONF_APP_USE_TLS_SOCKET
-#include "app_cert.h"
+#include "root_ca_cert.h"
 
 #ifndef DEVICE_TRNG
 #error "mbed-os-example-tls-socket requires a device which supports TRNG"
@@ -84,7 +84,7 @@ public:
         }
 
 #if MBED_CONF_APP_USE_TLS_SOCKET
-        result = _socket.set_root_ca_cert(app_cert);
+        result = _socket.set_root_ca_cert(root_ca_cert);
         if (result != NSAPI_ERROR_OK) {
             printf("Error: _socket.set_root_ca_cert() returned %d\n", result);
             return;

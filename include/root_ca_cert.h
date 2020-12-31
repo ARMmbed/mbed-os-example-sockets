@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-static const char app_cert[] = \
+static const char root_ca_cert[] = \
     "-----BEGIN CERTIFICATE-----\n"
     "MIIDdzCCAl+gAwIBAgIEAgAAuTANBgkqhkiG9w0BAQUFADBaMQswCQYDVQQGEwJJ\n"
     "RTESMBAGA1UEChMJQmFsdGltb3JlMRMwEQYDVQQLEwpDeWJlclRydXN0MSIwIAYD\n"
