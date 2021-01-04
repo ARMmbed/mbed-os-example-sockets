@@ -5,7 +5,7 @@
             "value": "\"ifconfig.io\""
         },
         "use-tls-socket": {
-            "value": true
+            "value": false
         }
     },
     "target_overrides": {
