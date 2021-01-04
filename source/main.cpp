@@ -254,4 +254,6 @@ int main() {
     SocketDemo *example = new SocketDemo;
     MBED_ASSERT(example);
     example->run();
+
+    return 0;
 }
