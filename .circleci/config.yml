@@ -15,7 +15,10 @@ jobs:
 
   build_mbed:
     docker:
-      - image: mbedos/mbed-os-env:latest
+      - image: mbedos/mbed-os-env-armc:latest
+        auth:
+          username: mbedos
+          password: $DOCKERHUB_PASSWORD
     parameters:
       toolchain:
         type: string
@@ -28,7 +31,10 @@ jobs:
 
   build_cmake:
     docker:
-      - image: mbedos/mbed-os-env:latest
+      - image: mbedos/mbed-os-env-armc:latest
+        auth:
+          username: mbedos
+          password: $DOCKERHUB_PASSWORD
     parameters:
       toolchain:
         type: string
@@ -45,18 +51,22 @@ workflows:
     jobs:
       - prepare
       - build_mbed:
+          context:
+            - mbedos-docker-hub-creds
           requires:
             - prepare
           matrix:
             parameters:
               target: ["K64F", "DISCO_F413ZH", "DISCO_L475VG_IOT01A"]
-              toolchain: ["GCC_ARM"]
+              toolchain: ["GCC_ARM","ARMC6"]
           name: build-mbed-<< matrix.target >>-<< matrix.toolchain >>
       - build_cmake:
+          context:
+            - mbedos-docker-hub-creds
           requires:
             - prepare
           matrix:
             parameters:
               target: ["K64F", "DISCO_L475VG_IOT01A"]
-              toolchain: ["GCC_ARM"]
+              toolchain: ["GCC_ARM","ARMC6"]
           name: build-cmake-<< matrix.target >>-<< matrix.toolchain >>
