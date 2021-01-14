@@ -57,7 +57,7 @@ workflows:
             - prepare
           matrix:
             parameters:
-              target: ["K64F", "DISCO_F413ZH", "DISCO_L475VG_IOT01A"]
+              target: ["K64F", "DISCO_F413ZH"]
               toolchain: ["GCC_ARM","ARMC6"]
           name: build-mbed-<< matrix.target >>-<< matrix.toolchain >>
       - build_cmake:
@@ -68,5 +68,5 @@ workflows:
           matrix:
             parameters:
               target: ["K64F", "DISCO_L475VG_IOT01A"]
-              toolchain: ["GCC_ARM","ARMC6"]
+              toolchain: ["GCC_ARM"]
           name: build-cmake-<< matrix.target >>-<< matrix.toolchain >>
