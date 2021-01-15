@@ -1,0 +1,72 @@
+version: 2.1
+
+jobs:
+  prepare:
+    docker:
+      - image: mbedos/mbed-os-env:latest
+    steps:
+      - checkout
+      - run: |
+          mbed deploy
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  build_mbed:
+    docker:
+      - image: mbedos/mbed-os-env-armc:latest
+        auth:
+          username: mbedos
+          password: $DOCKERHUB_PASSWORD
+    parameters:
+      toolchain:
+        type: string
+      target:
+        type: string
+    steps:
+      - attach_workspace:
+          at: .
+      - run: mbed compile -t << parameters.toolchain >> -m << parameters.target >> || exit 1
+
+  build_cmake:
+    docker:
+      - image: mbedos/mbed-os-env-armc:latest
+        auth:
+          username: mbedos
+          password: $DOCKERHUB_PASSWORD
+    parameters:
+      toolchain:
+        type: string
+      target:
+        type: string
+    steps:
+      - attach_workspace:
+          at: .
+      - run: python3 -m pip install mbed-tools --upgrade # remove after docker image is updated to contain new tools
+      - run: mbed-tools compile -t << parameters.toolchain >> -m << parameters.target >> || exit 1
+
+workflows:
+  workflow:
+    jobs:
+      - prepare
+      - build_mbed:
+          context:
+            - mbedos-docker-hub-creds
+          requires:
+            - prepare
+          matrix:
+            parameters:
+              target: ["K64F", "DISCO_F413ZH"]
+              toolchain: ["GCC_ARM","ARMC6"]
+          name: build-mbed-<< matrix.target >>-<< matrix.toolchain >>
+      - build_cmake:
+          context:
+            - mbedos-docker-hub-creds
+          requires:
+            - prepare
+          matrix:
+            parameters:
+              target: ["K64F", "DISCO_L475VG_IOT01A"]
+              toolchain: ["GCC_ARM"]
+          name: build-cmake-<< matrix.target >>-<< matrix.toolchain >>
