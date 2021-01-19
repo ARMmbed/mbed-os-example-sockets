@@ -16,6 +16,7 @@
 
 #include "mbed.h"
 #include "wifi_helper.h"
+#include "mbed-trace/mbed_trace.h"
 
 #if MBED_CONF_APP_USE_TLS_SOCKET
 #include "root_ca_cert.h"
@@ -251,7 +252,11 @@ private:
 int main() {
     printf("\r\nStarting socket demo\r\n\r\n");
 
-    SocketDemo *example = new SocketDemo;
+#ifdef MBED_CONF_MBED_TRACE_ENABLE
+    mbed_trace_init();
+#endif
+
+    SocketDemo *example = new SocketDemo();
     MBED_ASSERT(example);
     example->run();
 
