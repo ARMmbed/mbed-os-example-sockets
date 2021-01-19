@@ -90,7 +90,7 @@ public:
             printf("Error: _socket.set_root_ca_cert() returned %d\n", result);
             return;
         }
-        _socket.set_hostname("ifconfig.io");
+        _socket.set_hostname(MBED_CONF_APP_HOSTNAME);
 #endif // MBED_CONF_APP_USE_TLS_SOCKET
 
         /* now we have to find where to connect */
