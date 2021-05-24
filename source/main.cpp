@@ -184,7 +184,7 @@ private:
         /* loop until there is nothing received or we've ran out of buffer space */
         nsapi_size_or_error_t result = remaining_bytes;
         while (result > 0 && remaining_bytes > 0) {
-            nsapi_size_or_error_t result = _socket.recv(buffer + received_bytes, remaining_bytes);
+            result = _socket.recv(buffer + received_bytes, remaining_bytes);
             if (result < 0) {
                 printf("Error! _socket.recv() returned: %d\r\n", result);
                 return false;
