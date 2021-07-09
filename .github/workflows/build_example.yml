@@ -1,4 +1,4 @@
-name: Build examples
+name: Build example
 on:
   workflow_dispatch:
   schedule:
@@ -6,7 +6,7 @@ on:
   pull_request:
 jobs:
   run-conditional-feature-compilation-test:
-    name: Build BLE examples
+    name: Build example
     runs-on: ubuntu-latest
     container: mbedos/mbed-os-env:latest
     strategy:
