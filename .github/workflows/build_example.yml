@@ -1,0 +1,30 @@
+name: Build example
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 1 * * 6'
+  pull_request:
+jobs:
+  run-conditional-feature-compilation-test:
+    name: Build example
+    runs-on: ubuntu-latest
+    container: mbedos/mbed-os-env:latest
+    strategy:
+      matrix:
+        MBED_TARGET: ["K64F", "DISCO_F413ZH", "DISCO_L475VG_IOT01A"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy
+        run: |
+          mbed deploy
+
+      - name: Build mbed-cli v1
+        run: |
+          mbed compile -t GCC_ARM -m ${{ matrix.MBED_TARGET }} || exit 1
+
+      - name: Build cmake
+        run: |
+          python3 -m pip install mbed-tools --upgrade # remove after docker image is updated to contain new tools
+          mbed-tools compile -t GCC_ARM -m ${{ matrix.MBED_TARGET }} || exit 1
