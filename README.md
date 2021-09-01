@@ -8,9 +8,6 @@ It creates a TCPSocket and performs an HTTP transaction targeting the website in
 
 The example can be configured to use a TLSSocket. This works only on devices that support TRNG.
 
-(Note: To see this example in a rendered form you can import into the Arm Mbed Online Compiler,
-please see [the documentation](https://os.mbed.com/docs/mbed-os/latest/apis/socket.html#socket-example).)
-
 ## Selecting the network interface
 
 This application is able to use any network interface it finds.
@@ -82,53 +79,58 @@ documentation.
 
 ## Building and flashing the example
 
+### Mbed OS build tools
+
+#### Mbed CLI 2
+
+Starting with version 6.5, Mbed OS uses Mbed CLI 2. It uses Ninja as a build system, and CMake to generate the build environment and manage the build process in a compiler-independent manner. If you are working with Mbed OS version prior to 6.5 then check the section [Mbed CLI 1](#mbed-cli-1).
+1. [Install Mbed CLI 2](https://os.mbed.com/docs/mbed-os/latest/build-tools/install-or-upgrade.html).
+1. From the command-line, import the example: `mbed-tools import mbed-os-example-sockets`
+1. Change the current directory to where the project was imported.
+
+#### Mbed CLI 1
+1. [Install Mbed CLI 1](https://os.mbed.com/docs/mbed-os/latest/quick-start/offline-with-mbed-cli.html).
+1. From the command-line, import the example: `mbed import mbed-os-example-sockets`
+1. Change the current directory to where the project was imported.
+
 ### To build the example
 
-Clone the repository containing example:
+1. Connect a USB cable between the USB port on the board and the host computer.
+1. Run the following command to build the example project and program the microcontroller flash memory:
 
+    * Mbed CLI 2
+
+    ```bash
+    $ mbed-tools compile -m <TARGET> -t <TOOLCHAIN> --flash --sterm
+    ```
+
+    * Mbed CLI 1
+
+    ```bash
+    $ mbed compile -m <TARGET> -t <TOOLCHAIN> --flash --sterm
+    ```
+
+Your PC may take a few minutes to compile your code.
+
+The binary is located at:
+* **Mbed CLI 2** - `./cmake_build/<TARGET>/<PROFILE>/<TOOLCHAIN>/mbed-os-example-sockets.bin`</br>
+* **Mbed CLI 1** - `./BUILD/<TARGET>/<TOOLCHAIN>/mbed-os-example-sockets.bin`
+
+Alternatively, you can manually copy the binary to the board, which you mount on the host computer over USB.
+
+You can also open a serial terminal separately, rather than using the `--sterm` option, with the following command:
+
+* Mbed CLI 2
+
+```bash
+$ mbed-tools sterm
 ```
-git clone https://github.com/ARMmbed/mbed-os-example-sockets.git
+
+* Mbed CLI 1
+
+```bash
+$ mbed sterm
 ```
-
-**Tip:** If you don't have git installed, you can
-[download a zip file](https://github.com/ARMmbed/mbed-os-example-sockets/archive/master.zip)
-of the repository.
-
-Update the source tree:
-
-```
-cd mbed-os-example-sockets
-mbed deploy
-```
-
-Run the build:
-
-```mbed compile -t <ARM | GCC_ARM> -m <YOUR_TARGET>```
-
-### To flash the example onto your board
-
-Connect your mbed board to your computer over USB. It appears as removable storage.
-
-When you run the `mbed compile` command above, mbed cli creates a .bin or a .hex file (depending on your target) in
-```BUILD/<target-name>/<toolchain>``` under the example's directory. Drag and drop the file to the removable storage.
-
-Alternatively you may launch compilation with `-f` flag to have mbed tools attempt to flash your board.
-The tools will flash the binary to all targets that match the board specified by '-m' parameter. 
-
-## Running the example
-
-
-When example application is running information about activity is printed over the serial connection.
-
-**Note:** The default serial baudrate has been set to 9600.
-
-Please have a client open and connected to the board. You may use:
-
-- [Tera Term](https://ttssh2.osdn.jp/index.html.en) for windows
-
-- screen or minicom for Linux (example usage: `screen /dev/serial/<your board> 9600`)
-
-- mbed tools has a terminal command `mbed term -b 9600`
 
 ### Expected output
 
