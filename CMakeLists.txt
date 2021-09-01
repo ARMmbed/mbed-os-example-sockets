@@ -34,6 +34,14 @@ target_link_libraries(${APP_TARGET}
         mbed-mbedtls
 )
 
+if("ism43362" IN_LIST MBED_TARGET_LABELS)
+    add_subdirectory(COMPONENT_ism43362)
+    target_link_libraries(${APP_TARGET}
+        PRIVATE
+            wifi-ism43362
+    )
+endif()
+
 mbed_set_post_build(${APP_TARGET})
 
 option(VERBOSE_BUILD "Have a verbose build process")
